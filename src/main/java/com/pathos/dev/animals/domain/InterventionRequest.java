@@ -142,4 +142,23 @@ public class InterventionRequest {
     public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
+
+    @Override
+    public String toString() {
+        return "InterventionRequest{" +
+                "id='" + id + '\'' +
+                ", requestDate=" + requestDate +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", description='" + description + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", parcel='" + parcel + '\'' +
+                ", houseNumber='" + houseNumber + '\'' +
+                ", city='" + city + '\'' +
+                ", street='" + street + '\'' +
+                ", requestStatus=" + requestStatus +
+                ", longitude=" + longitude +
+                ", latitude=" + latitude +
+                '}';
+    }
 }
