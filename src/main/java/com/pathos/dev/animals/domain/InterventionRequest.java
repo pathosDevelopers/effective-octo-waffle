@@ -1,5 +1,8 @@
 package com.pathos.dev.animals.domain;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+
 import java.util.Date;
 
 public class InterventionRequest {
@@ -10,13 +13,57 @@ public class InterventionRequest {
     private String description;
     private String phoneNumber;
 
-    public InterventionRequest(Date creationDate, Date mofificationDate, String name, String surname, String description, String phoneNumber) {
-        this.creationDate = creationDate;
-        this.mofificationDate = mofificationDate;
-        this.name = name;
-        this.surname = surname;
-        this.description = description;
-        this.phoneNumber = phoneNumber;
+    private String parcel;
+    private String houseNumber;
+    private String city;
+    private String street;
+
+    public String getParcel() {
+        return parcel;
+    }
+
+    public void setParcel(String parcel) {
+        this.parcel = parcel;
+    }
+
+    public String getHouseNumber() {
+        return houseNumber;
+    }
+
+    public void setHouseNumber(String houseNumber) {
+        this.houseNumber = houseNumber;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public InterventionRequest(JsonElement json) {
+        Gson gson = new Gson();
+        InterventionRequest request = gson.fromJson(json, InterventionRequest.class);
+
+        this.creationDate = request.getCreationDate();
+        this.mofificationDate = request.getMofificationDate();
+        this.name = request.getName();
+        this.surname = request.getDescription();
+        this.description = request.getDescription();
+        this.phoneNumber = request.getPhoneNumber();
+        this.city = request.getCity();
+        this.houseNumber = request.getHouseNumber();
+        this.parcel = request.getParcel();
+        this.street = request.getStreet();
     }
 
     public Date getCreationDate() {
