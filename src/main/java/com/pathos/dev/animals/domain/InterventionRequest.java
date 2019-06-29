@@ -18,13 +18,13 @@ public class InterventionRequest {
     private String city;
     private String street;
 
-    private String status;
+    private int status;
 
-    public String getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 

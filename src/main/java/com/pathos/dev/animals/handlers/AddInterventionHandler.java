@@ -2,25 +2,27 @@ package com.pathos.dev.animals.handlers;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
-import com.amazonaws.services.dynamodbv2.document.DynamoDB;
-import com.amazonaws.services.dynamodbv2.document.Item;
-import com.amazonaws.services.dynamodbv2.document.spec.PutItemSpec;
-import com.amazonaws.services.dynamodbv2.document.utils.NameMap;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.PutItemRequest;
-import com.amazonaws.services.dynamodbv2.model.PutRequest;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.pathos.dev.animals.domain.InterventionRequest;
 
 import java.io.*;
+import java.security.SecureRandom;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class AddInterventionHandler implements RequestStreamHandler {
+
+    private static final SecureRandom secureRandom = new SecureRandom();
+
+
 
     @Override
     public void handleRequest(InputStream inputStream, OutputStream outputStream, Context context) throws IOException {
@@ -40,6 +42,9 @@ public class AddInterventionHandler implements RequestStreamHandler {
                 InterventionRequest request = new InterventionRequest(event.get("body"));
                 Map<String, AttributeValue> attributeValues = new HashMap<>();
 
+                attributeValues.put("id", new AttributeValue().withS(UUID.randomUUID().toString()));
+
+                attributeValues.put("name", new AttributeValue().withS(request.getName()));
                 attributeValues.put("creationDate", new AttributeValue().withN(Long.toString(new Date().getTime() + 100)));
                 attributeValues.put("mofificationDate", new AttributeValue().withN(Long.toString(new Date().getTime() + 100)));
 
@@ -51,7 +56,7 @@ public class AddInterventionHandler implements RequestStreamHandler {
                 attributeValues.put("houseNumber", new AttributeValue().withS(request.getHouseNumber()));
                 attributeValues.put("city", new AttributeValue().withS(request.getCity()));
                 attributeValues.put("street", new AttributeValue().withS(request.getStreet()));
-                attributeValues.put("status", new AttributeValue().withS(request.getStatus()));
+                attributeValues.put("status", new AttributeValue().withSS(String.valueOf(request.getStatus())));
 
                 PutItemRequest putItemRequest = new PutItemRequest().withTableName("Intervention").withItem(attributeValues);
                 client.putItem(putItemRequest);
