@@ -6,23 +6,19 @@ import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.PutItemRequest;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.pathos.dev.animals.domain.InterventionRequest;
 
 import java.io.*;
 import java.security.SecureRandom;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 public class AddInterventionHandler implements RequestStreamHandler {
-
-    private static final SecureRandom secureRandom = new SecureRandom();
-
-
 
     @Override
     public void handleRequest(InputStream inputStream, OutputStream outputStream, Context context) throws IOException {
@@ -45,6 +41,7 @@ public class AddInterventionHandler implements RequestStreamHandler {
                 attributeValues.put("id", new AttributeValue().withS(UUID.randomUUID().toString()));
 
                 attributeValues.put("name", new AttributeValue().withS(request.getName()));
+                attributeValues.put("timestamp", new AttributeValue().withL(new AttributeValue().withN(Long.toString(new Date().getTime()))));
                 attributeValues.put("creationDate", new AttributeValue().withN(Long.toString(new Date().getTime() + 100)));
                 attributeValues.put("mofificationDate", new AttributeValue().withN(Long.toString(new Date().getTime() + 100)));
 
