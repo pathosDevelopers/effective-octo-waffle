@@ -11,8 +11,6 @@ import com.google.gson.JsonParser;
 import com.pathos.dev.animals.domain.InterventionRequest;
 
 import java.io.*;
-import java.security.SecureRandom;
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,14 +32,16 @@ public class AddInterventionHandler implements RequestStreamHandler {
             JsonObject event = (JsonObject) parser.parse(reader);
             AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard().build();
 
+            String id = null;
             if (event.get("body") != null) {
                 InterventionRequest request = new InterventionRequest(event.get("body"));
                 Map<String, AttributeValue> attributeValues = new HashMap<>();
 
+                id = UUID.randomUUID().toString();
+
                 attributeValues.put("id", new AttributeValue().withS(UUID.randomUUID().toString()));
 
-                attributeValues.put("name", new AttributeValue().withS(request.getName()));
-                attributeValues.put("timestamp", new AttributeValue().withL(new AttributeValue().withN(Long.toString(new Date().getTime()))));
+                attributeValues.put("requestDate", new AttributeValue().withN(id));
                 attributeValues.put("creationDate", new AttributeValue().withN(Long.toString(new Date().getTime() + 100)));
                 attributeValues.put("mofificationDate", new AttributeValue().withN(Long.toString(new Date().getTime() + 100)));
 
@@ -53,15 +53,15 @@ public class AddInterventionHandler implements RequestStreamHandler {
                 attributeValues.put("houseNumber", new AttributeValue().withS(request.getHouseNumber()));
                 attributeValues.put("city", new AttributeValue().withS(request.getCity()));
                 attributeValues.put("street", new AttributeValue().withS(request.getStreet()));
-                attributeValues.put("status", new AttributeValue().withSS(String.valueOf(request.getStatus())));
+                attributeValues.put("interventionStatus", new AttributeValue().withS(String.valueOf(request.getStatus())));
 
-                PutItemRequest putItemRequest = new PutItemRequest().withTableName("Intervention").withItem(attributeValues);
+                PutItemRequest putItemRequest = new PutItemRequest().withTableName("Interventions").withItem(attributeValues);
                 client.putItem(putItemRequest);
 
             }
-            responseBodyJson.addProperty("message", "new intervention created");
+            responseBodyJson.addProperty("message", "new intervention created " + id);
 
-            headerJson.addProperty("x-custom-header", "my custom header value");
+            headerJson.addProperty("x-custom-header", "OK");
             responseJson.add("headers", headerJson);
             responseJson.add("body", responseBodyJson);
 
