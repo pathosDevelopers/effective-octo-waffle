@@ -8,6 +8,7 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.pathos.dev.animals.domain.InterventionRequest;
@@ -23,14 +24,21 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 
-public class GetInterventions implements RequestHandler {
+public class GetInterventions implements RequestStreamHandler {
 
     private static final String TABLE_NAME = "Interventions";
     private static final Integer CLOSED_INTERVENTION_STATUS = 4;
 
     @Override
-    public Object handleRequest(Object o, Context context) {
+    public void handleRequest(InputStream inputStream, OutputStream outputStream, Context context) throws IOException {
         String id = null;
+        context.getLogger().log("Input: " + inputStream);
+        final ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode json = objectMapper.readTree(inputStream);
+//        id = json.path("id").asText();
+
+        context.getLogger().log("Id: " + json.asText());
+
 //        BufferedReader streamReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
 //        StringBuilder responseStrBuilder = new StringBuilder();
 //
@@ -89,16 +97,16 @@ public class GetInterventions implements RequestHandler {
             response.interventions = scanResult.stream().collect(Collectors.toList());
         }
 
-//        outputStream.write(new ObjectMapper().writeValueAsString(response).getBytes());
-//        outputStream.close();
+        outputStream.write(new ObjectMapper().writeValueAsString(response).getBytes());
+        outputStream.close();
 
-        String responseString = null;
-        try {
-            responseString = new ObjectMapper().writeValueAsString(response);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-
-        return responseString;
+//        String responseString = null;
+//        try {
+//            responseString = new ObjectMapper().writeValueAsString(response);
+//        } catch (JsonProcessingException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return responseString;
     }
 }
