@@ -2,9 +2,7 @@ package com.pathos.dev.animals.handlers;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
-import com.amazonaws.services.dynamodbv2.model.AttributeValue;
-import com.amazonaws.services.dynamodbv2.model.QueryRequest;
-import com.amazonaws.services.dynamodbv2.model.ScanRequest;
+import com.amazonaws.services.dynamodbv2.model.*;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.pathos.dev.animals.domain.InterventionsQueryRequest;
@@ -45,9 +43,13 @@ public class GetInterventions implements RequestHandler<InterventionsQueryReques
         InterventionsQueryResponse response = new InterventionsQueryResponse();
 
         if(id != null) {
-            response.count = client.query(queryRequest).getCount();
+            QueryResult queryResult = client.query(queryRequest);
+            response.count = queryResult.getCount();
+            response.interventions = queryResult.getItems();
         } else {
-            response.count = client.scan(scanRequest).getCount();
+            ScanResult scanResult = client.scan(scanRequest);
+            response.count = scanResult.getCount();
+            response.interventions = scanResult.getItems();
         }
 
         return response;
