@@ -3,8 +3,6 @@ package com.pathos.dev.animals.domain;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 
 import java.util.Date;
 
