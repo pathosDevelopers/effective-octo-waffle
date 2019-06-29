@@ -2,6 +2,10 @@ package com.pathos.dev.animals.handlers;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
+import com.amazonaws.services.dynamodbv2.document.DynamoDB;
+import com.amazonaws.services.dynamodbv2.document.Item;
+import com.amazonaws.services.dynamodbv2.document.spec.PutItemSpec;
+import com.amazonaws.services.dynamodbv2.document.utils.NameMap;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.PutItemRequest;
 import com.amazonaws.services.dynamodbv2.model.PutRequest;
@@ -32,11 +36,8 @@ public class AddInterventionHandler implements RequestStreamHandler {
             JsonObject event = (JsonObject) parser.parse(reader);
             AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard().build();
 
-
             if (event.get("body") != null) {
                 InterventionRequest request = new InterventionRequest(event.get("body"));
-
-                PutItemRequest putItemRequest = new PutItemRequest();
                 Map<String, AttributeValue> attributeValues = new HashMap<>();
 
                 attributeValues.put("creationDate", new AttributeValue().withN(Long.toString(new Date().getTime() + 100)));
@@ -52,10 +53,9 @@ public class AddInterventionHandler implements RequestStreamHandler {
                 attributeValues.put("street", new AttributeValue().withS(request.getStreet()));
                 attributeValues.put("status", new AttributeValue().withS(request.getStatus()));
 
-                PutRequest putRequest = new PutRequest();
-                putRequest.setItem(attributeValues);
-
+                PutItemRequest putItemRequest = new PutItemRequest().withTableName("Intervention").withItem(attributeValues);
                 client.putItem(putItemRequest);
+
             }
             responseBodyJson.addProperty("message", "new intervention created");
 
