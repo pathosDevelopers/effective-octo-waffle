@@ -23,8 +23,6 @@ public class AddInterventionHandler implements RequestHandler<InterventionReques
             attributeValues.put("id", new AttributeValue().withS(UUID.randomUUID().toString()));
 
             attributeValues.put("requestDate", new AttributeValue().withN(Long.toString(new Date().getTime())));
-            attributeValues.put("creationDate", new AttributeValue().withN(Long.toString(new Date().getTime() + 100)));
-            attributeValues.put("mofificationDate", new AttributeValue().withN(Long.toString(new Date().getTime() + 100)));
 
             if (interventionRequest.getName() != null)
                 attributeValues.put("name", new AttributeValue().withS(interventionRequest.getName()));
@@ -42,7 +40,7 @@ public class AddInterventionHandler implements RequestHandler<InterventionReques
                 attributeValues.put("city", new AttributeValue().withS(interventionRequest.getCity()));
             if (interventionRequest.getStreet() != null)
                 attributeValues.put("street", new AttributeValue().withS(interventionRequest.getStreet()));
-            attributeValues.put("interventionStatus", new AttributeValue().withS(String.valueOf(1))); //getStatus
+            attributeValues.put("interventionStatus", new AttributeValue().withN(String.valueOf(interventionRequest.getRequestStatus())));
 
             attributeValues.values().removeIf(Objects::isNull);
 
