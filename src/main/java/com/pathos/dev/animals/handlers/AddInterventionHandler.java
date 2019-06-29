@@ -21,26 +21,17 @@ public class AddInterventionHandler implements RequestHandler<InterventionReques
             Map<String, AttributeValue> attributeValues = new HashMap<>();
 
             attributeValues.put("id", new AttributeValue().withS(UUID.randomUUID().toString()));
-
             attributeValues.put("requestDate", new AttributeValue().withN(Long.toString(new Date().getTime())));
 
-            if (interventionRequest.getName() != null)
-                attributeValues.put("name", new AttributeValue().withS(interventionRequest.getName()));
-            if (interventionRequest.getSurname() != null)
-                attributeValues.put("surname", new AttributeValue().withS(interventionRequest.getSurname()));
-            if (interventionRequest.getDescription() != null)
-                attributeValues.put("description", new AttributeValue().withS(interventionRequest.getDescription()));
-            if (interventionRequest.getPhoneNumber() != null)
-                attributeValues.put("phoneNumber", new AttributeValue().withS(interventionRequest.getPhoneNumber()));
-            if (interventionRequest.getParcel() != null)
-                attributeValues.put("parcel", new AttributeValue().withS(interventionRequest.getParcel()));
-            if (interventionRequest.getHouseNumber() != null)
-                attributeValues.put("houseNumber", new AttributeValue().withS(interventionRequest.getHouseNumber()));
-            if (interventionRequest.getCity() != null)
-                attributeValues.put("city", new AttributeValue().withS(interventionRequest.getCity()));
-            if (interventionRequest.getStreet() != null)
-                attributeValues.put("street", new AttributeValue().withS(interventionRequest.getStreet()));
-            attributeValues.put("interventionStatus", new AttributeValue().withN(String.valueOf(interventionRequest.getRequestStatus())));
+            addValWithS(attributeValues, "name", interventionRequest.getName());
+            addValWithS(attributeValues, "surname", interventionRequest.getSurname());
+            addValWithS(attributeValues, "description", interventionRequest.getDescription());
+            addValWithS(attributeValues, "phoneNumber", interventionRequest.getPhoneNumber());
+            addValWithS(attributeValues, "parcel", interventionRequest.getParcel());
+            addValWithS(attributeValues, "houseNumber", interventionRequest.getHouseNumber());
+            addValWithS(attributeValues, "city", interventionRequest.getCity());
+            addValWithS(attributeValues, "street", interventionRequest.getStreet());
+            addValWithN(attributeValues, "interventionStatus", interventionRequest.getRequestStatus());
 
             attributeValues.values().removeIf(Objects::isNull);
 
@@ -51,5 +42,17 @@ public class AddInterventionHandler implements RequestHandler<InterventionReques
             e.printStackTrace();
         }
         return new InterventionsQueryResponse();
+    }
+
+    private void addValWithS(Map<String, AttributeValue> attributeValues, String key, String value) {
+        if (value != null) {
+            AttributeValue attributeValue = new AttributeValue().withS(value);
+            attributeValues.put(key, attributeValue);
+        }
+    }
+
+    private void addValWithN(Map<String, AttributeValue> attributeValues, String key, int value) {
+            AttributeValue attributeValue = new AttributeValue().withN(String.valueOf(value));
+            attributeValues.put(key, attributeValue);
     }
 }
