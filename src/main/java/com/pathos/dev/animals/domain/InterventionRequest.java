@@ -13,7 +13,7 @@ public class InterventionRequest {
 
     private String id;
 
-    private Date requestDate;
+    private long requestDate;
     private String name;
     private String surname;
     private String description;
@@ -74,11 +74,11 @@ public class InterventionRequest {
     }
 
     @DynamoDBAttribute(attributeName = "requestDate")
-    public Date getRequestDate() {
+    public long getRequestDate() {
         return requestDate;
     }
 
-    public void setRequestDate(Date requestDate) {
+    public void setRequestDate(long requestDate) {
         this.requestDate = requestDate;
     }
 
