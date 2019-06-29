@@ -1,0 +1,5 @@
+amazonProperties:
+  endpointUrl: https://s3.console.aws.amazon.com
+  accessKey: AKIA2EVYDQMXIA6R4IGE
+  secretKey: AKIA2EVYDQMXIA6R4IGE
+  bucketName: kodawanieuploadfiles
