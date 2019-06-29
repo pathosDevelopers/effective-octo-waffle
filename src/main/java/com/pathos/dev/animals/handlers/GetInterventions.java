@@ -35,29 +35,9 @@ public class GetInterventions implements RequestStreamHandler {
         context.getLogger().log("Input: " + inputStream);
         final ObjectMapper objectMapper = new ObjectMapper();
         JsonNode json = objectMapper.readTree(inputStream);
-//        id = json.path("id").asText();
 
-        context.getLogger().log("Id: " + json.asText());
-
-//        BufferedReader streamReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
-//        StringBuilder responseStrBuilder = new StringBuilder();
-//
-//        String inputStr;
-//        while ((inputStr = streamReader.readLine()) != null) {
-//            responseStrBuilder.append(inputStr);
-//            System.out.println(inputStr);
-//        }
-//        JSONObject jsonObject = new JSONObject(responseStrBuilder.toString());
-//        try {
-//            if (jsonObject.get("pathParameters") != null) {
-//                JSONObject pps = (JSONObject) jsonObject.get("pathParameters");
-//                if (pps.get("id") != null) {
-//                    id = (String) pps.get("id");
-//                }
-//            }
-//        } catch (JSONException exc) {
-//            System.out.println("Path parameter not found");
-//        }
+        context.getLogger().log("Id: " + json.path("id"));
+        id = json.path("id").asText();
 
         HashMap<String, AttributeValue> attributesMap = new HashMap<>();
         if (id != null) {
@@ -66,19 +46,11 @@ public class GetInterventions implements RequestStreamHandler {
             attributesMap.put(":interventionDate", new AttributeValue().withN(String.valueOf(LocalDate.now().minusDays(30).toEpochDay())));
         }
 
-        ScanRequest scanRequest = new ScanRequest().withTableName(TABLE_NAME)
-//                .withFilterExpression("interventionDate < :interventionDate")
-//                .withExpressionAttributeValues(attributesMap)
-                ;
+        ScanRequest scanRequest = new ScanRequest().withTableName(TABLE_NAME);
 
         DynamoDBScanExpression scanExpression = new DynamoDBScanExpression();
 
         AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard().build();
-
-        QueryRequest queryRequest = new QueryRequest()
-                .withTableName(TABLE_NAME)
-                .withKeyConditionExpression("id = :id")
-                .withExpressionAttributeValues(attributesMap);
 
         DynamoDBQueryExpression<InterventionRequest> queryExpression = new DynamoDBQueryExpression<InterventionRequest>()
                 .withKeyConditionExpression("id = :id")
@@ -100,13 +72,5 @@ public class GetInterventions implements RequestStreamHandler {
         outputStream.write(new ObjectMapper().writeValueAsString(response).getBytes());
         outputStream.close();
 
-//        String responseString = null;
-//        try {
-//            responseString = new ObjectMapper().writeValueAsString(response);
-//        } catch (JsonProcessingException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return responseString;
     }
 }
