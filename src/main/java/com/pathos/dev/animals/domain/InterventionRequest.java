@@ -18,6 +18,16 @@ public class InterventionRequest {
     private String city;
     private String street;
 
+    private String status;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public String getParcel() {
         return parcel;
     }
@@ -64,6 +74,7 @@ public class InterventionRequest {
         this.houseNumber = request.getHouseNumber();
         this.parcel = request.getParcel();
         this.street = request.getStreet();
+        this.status = request.getStatus();
     }
 
     public Date getCreationDate() {
