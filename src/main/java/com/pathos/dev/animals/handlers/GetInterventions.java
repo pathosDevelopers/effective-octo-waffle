@@ -2,6 +2,7 @@ package com.pathos.dev.animals.handlers;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.model.*;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
@@ -9,7 +10,6 @@ import com.pathos.dev.animals.domain.InterventionsQueryRequest;
 import com.pathos.dev.animals.domain.InterventionsQueryResponse;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class GetInterventions implements RequestHandler<InterventionsQueryRequest, InterventionsQueryResponse> {
@@ -42,6 +42,7 @@ public class GetInterventions implements RequestHandler<InterventionsQueryReques
 
         InterventionsQueryResponse response = new InterventionsQueryResponse();
 
+        DynamoDBMapper mapper = new DynamoDBMapper(client);
         if(id != null) {
             QueryResult queryResult = client.query(queryRequest);
             response.count = queryResult.getCount();
@@ -51,6 +52,9 @@ public class GetInterventions implements RequestHandler<InterventionsQueryReques
             response.count = scanResult.getCount();
             response.interventions = scanResult.getItems();
         }
+
+
+
 
         return response;
     }

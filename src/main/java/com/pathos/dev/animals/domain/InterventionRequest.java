@@ -1,13 +1,19 @@
 package com.pathos.dev.animals.domain;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
 import java.util.Date;
 
+@DynamoDBTable(tableName = "Interventions")
 public class InterventionRequest {
-    private Date creationDate;
-    private Date mofificationDate;
+
+    private String id;
+
+    private Date requestDate;
     private String name;
     private String surname;
     private String description;
@@ -18,16 +24,20 @@ public class InterventionRequest {
     private String city;
     private String street;
 
-    private int status;
+    private int requestStatus;
 
-    public int getStatus() {
-        return status;
+    private double longitude, latitude;
+
+    @DynamoDBAttribute(attributeName = "requestStatus")
+    public int getRequestStatus() {
+        return requestStatus;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
+    public void setRequestStatus(int requestStatus) {
+        this.requestStatus = requestStatus;
     }
 
+    @DynamoDBAttribute(attributeName = "parcel")
     public String getParcel() {
         return parcel;
     }
@@ -36,6 +46,7 @@ public class InterventionRequest {
         this.parcel = parcel;
     }
 
+    @DynamoDBAttribute(attributeName = "houseNumber")
     public String getHouseNumber() {
         return houseNumber;
     }
@@ -44,6 +55,7 @@ public class InterventionRequest {
         this.houseNumber = houseNumber;
     }
 
+    @DynamoDBAttribute(attributeName = "city")
     public String getCity() {
         return city;
     }
@@ -52,6 +64,7 @@ public class InterventionRequest {
         this.city = city;
     }
 
+    @DynamoDBAttribute(attributeName = "street")
     public String getStreet() {
         return street;
     }
@@ -60,39 +73,16 @@ public class InterventionRequest {
         this.street = street;
     }
 
-    public InterventionRequest(JsonElement json) {
-        Gson gson = new Gson();
-        InterventionRequest request = gson.fromJson(json, InterventionRequest.class);
-
-        this.creationDate = request.getCreationDate();
-        this.mofificationDate = request.getMofificationDate();
-        this.name = request.getName();
-        this.surname = request.getDescription();
-        this.description = request.getDescription();
-        this.phoneNumber = request.getPhoneNumber();
-        this.city = request.getCity();
-        this.houseNumber = request.getHouseNumber();
-        this.parcel = request.getParcel();
-        this.street = request.getStreet();
-        this.status = request.getStatus();
+    @DynamoDBAttribute(attributeName = "requestDate")
+    public Date getRequestDate() {
+        return requestDate;
     }
 
-    public Date getCreationDate() {
-        return creationDate;
+    public void setRequestDate(Date requestDate) {
+        this.requestDate = requestDate;
     }
 
-    public void setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
-    }
-
-    public Date getMofificationDate() {
-        return mofificationDate;
-    }
-
-    public void setMofificationDate(Date mofificationDate) {
-        this.mofificationDate = mofificationDate;
-    }
-
+    @DynamoDBAttribute(attributeName = "name")
     public String getName() {
         return name;
     }
@@ -101,6 +91,7 @@ public class InterventionRequest {
         this.name = name;
     }
 
+    @DynamoDBAttribute(attributeName = "surname")
     public String getSurname() {
         return surname;
     }
@@ -109,6 +100,7 @@ public class InterventionRequest {
         this.surname = surname;
     }
 
+    @DynamoDBAttribute(attributeName = "description")
     public String getDescription() {
         return description;
     }
@@ -117,11 +109,39 @@ public class InterventionRequest {
         this.description = description;
     }
 
+    @DynamoDBAttribute(attributeName = "phoneNumber")
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    @DynamoDBHashKey(attributeName = "id")
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    @DynamoDBAttribute(attributeName = "longitude")
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    @DynamoDBAttribute(attributeName = "latitude")
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
     }
 }
