@@ -22,7 +22,7 @@ public class EditInterventionHander implements RequestHandler<InterventionReques
             AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard().build();
             Map<String, AttributeValueUpdate> attributeValues = new HashMap<>();
 
-            updateValWithL(attributeValues, "requestDate", interventionRequest.getRequestDate().getTime());
+            updateValWithL(attributeValues, "requestDate", interventionRequest.getRequestDate());
             updateValWithS(attributeValues, "name", interventionRequest.getName());
             updateValWithS(attributeValues, "surname", interventionRequest.getSurname());
             updateValWithS(attributeValues, "description", interventionRequest.getDescription());
