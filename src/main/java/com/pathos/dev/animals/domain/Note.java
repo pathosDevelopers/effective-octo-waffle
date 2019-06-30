@@ -10,7 +10,7 @@ import java.util.Date;
 public class Note {
     private String title;
     private String author;
-    private Date requestDate;
+    private long requestDate;
     private String content;
 
     @DynamoDBAttribute(attributeName = "title")
@@ -31,11 +31,12 @@ public class Note {
         this.author = author;
     }
 
-    public Date getRequestDate() {
+    @DynamoDBAttribute(attributeName = "requestDate")
+    public long getRequestDate() {
         return requestDate;
     }
 
-    public void setRequestDate(Date requestDate) {
+    public void setRequestDate(long requestDate) {
         this.requestDate = requestDate;
     }
 
