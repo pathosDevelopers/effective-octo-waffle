@@ -14,6 +14,8 @@ import com.pathos.dev.animals.domain.Note;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AddNotesHandler implements RequestStreamHandler {
     @Override
@@ -21,7 +23,6 @@ public class AddNotesHandler implements RequestStreamHandler {
 
         final ObjectMapper objectMapper = new ObjectMapper();
         JsonNode json = objectMapper.readTree(inputStream);
-        final Gson g = new Gson();
 
         JsonNode jsonId = json.get("interventionId");
         context.getLogger().log("InterventionId: " + jsonId);
@@ -31,7 +32,6 @@ public class AddNotesHandler implements RequestStreamHandler {
 
         InterventionRequest intervention = mapper.load(InterventionRequest.class, jsonId.asText());
 
-
         JsonNode jsonNote = json.get("note");
         context.getLogger().log("note: " + jsonNote.get("title").asText());
         Note note = new Note();
@@ -39,7 +39,11 @@ public class AddNotesHandler implements RequestStreamHandler {
         note.setAuthor(jsonNote.get("author").asText());
         note.setContent(jsonNote.get("content").asText());
 
-        intervention.getNotes().add(note);
+        List<Note> notes = intervention.getNotes();
+        if(notes == null) {
+            notes = new ArrayList<>();
+        }
+        notes.add(note);
 
         mapper.save(intervention);
     }

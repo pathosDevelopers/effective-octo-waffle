@@ -37,16 +37,4 @@ public class AddInterventionHandler implements RequestHandler<InterventionReques
         }
         return new InterventionsQueryResponse();
     }
-
-    private void addValWithS(Map<String, AttributeValue> attributeValues, String key, String value) {
-        if (value != null) {
-            AttributeValue attributeValue = new AttributeValue().withS(value);
-            attributeValues.put(key, attributeValue);
-        }
-    }
-
-    private void addValWithN(Map<String, AttributeValue> attributeValues, String key, int value) {
-            AttributeValue attributeValue = new AttributeValue().withN(String.valueOf(value));
-            attributeValues.put(key, attributeValue);
-    }
 }
