@@ -31,7 +31,7 @@ public class EditInterventionHander implements RequestHandler<InterventionReques
             updateValWithS(attributeValues, "houseNumber", interventionRequest.getHouseNumber());
             updateValWithS(attributeValues, "city", interventionRequest.getCity());
             updateValWithS(attributeValues, "street", interventionRequest.getStreet());
-            updateValWithN(attributeValues, "interventionStatus", interventionRequest.getRequestStatus());
+            updateValWithN(attributeValues, "requestStatus", interventionRequest.getRequestStatus());
 
             attributeValues.values().removeIf(Objects::isNull);
 
