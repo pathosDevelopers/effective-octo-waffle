@@ -7,7 +7,22 @@ import java.util.Map;
 
 public class NotesQueryResponse {
 
-    public Integer count;
-    public List<String> notes;
+    private Integer count;
+    private List<Note> notes;
 
+    public Integer getCount() {
+        return count;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
+    }
+
+    public List<Note> getNotes() {
+        return notes;
+    }
+
+    public void setNotes(List<Note> notes) {
+        this.notes = notes;
+    }
 }

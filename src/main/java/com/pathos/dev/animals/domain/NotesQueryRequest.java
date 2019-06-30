@@ -1,25 +1,19 @@
 package com.pathos.dev.animals.domain;
 
-import java.util.List;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
+@DynamoDBTable(tableName = "Interventions")
 public class NotesQueryRequest {
 
-    private String id;
-    private List<Note> notes;
+    private String interventionId;
 
-    public String getId() {
-        return id;
+    @DynamoDBAttribute(attributeName = "interventionId")
+    public String getInterventionId() {
+        return interventionId;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public List<Note> getNotes() {
-        return notes;
-    }
-
-    public void setNotes(List<Note> nottes) {
-        this.notes = nottes;
+    public void setInterventionId(String interventionId) {
+        this.interventionId = interventionId;
     }
 }
