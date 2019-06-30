@@ -1,13 +1,18 @@
 package com.pathos.dev.animals.domain;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+
 import java.util.Date;
 
+@DynamoDBTable(tableName = "Interventions")
 public class Note {
     private String title;
     private String author;
     private Date requestDate;
     private String content;
 
+    @DynamoDBAttribute(attributeName = "title")
     public String getTitle() {
         return title;
     }
@@ -16,6 +21,7 @@ public class Note {
         this.title = title;
     }
 
+    @DynamoDBAttribute(attributeName = "author")
     public String getAuthor() {
         return author;
     }
@@ -32,6 +38,7 @@ public class Note {
         this.requestDate = requestDate;
     }
 
+    @DynamoDBAttribute(attributeName = "content")
     public String getContent() {
         return content;
     }
