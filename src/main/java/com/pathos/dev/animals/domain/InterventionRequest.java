@@ -27,6 +27,7 @@ public class InterventionRequest {
     private List<Note> notes;
 
     private double longitude, latitude;
+    private List<String> files;
 
     @DynamoDBAttribute(attributeName = "requestStatus")
     public int getRequestStatus() {
@@ -152,6 +153,15 @@ public class InterventionRequest {
 
     public void setNotes(List<Note> notes) {
         this.notes = notes;
+    }
+
+    @DynamoDBAttribute
+    public List<String> getFiles() {
+        return files;
+    }
+
+    public void setFiles(List<String> files) {
+        this.files = files;
     }
 
     @Override
