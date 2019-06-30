@@ -31,7 +31,7 @@ public class AddInterventionHandler implements RequestHandler<InterventionReques
             addValWithS(attributeValues, "houseNumber", interventionRequest.getHouseNumber());
             addValWithS(attributeValues, "city", interventionRequest.getCity());
             addValWithS(attributeValues, "street", interventionRequest.getStreet());
-            addValWithN(attributeValues, "interventionStatus", interventionRequest.getRequestStatus());
+            addValWithN(attributeValues, "requestStatus", interventionRequest.getRequestStatus());
 
             attributeValues.values().removeIf(Objects::isNull);
 
