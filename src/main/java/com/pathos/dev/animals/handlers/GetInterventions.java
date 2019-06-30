@@ -36,10 +36,10 @@ public class GetInterventions implements RequestStreamHandler {
         final ObjectMapper objectMapper = new ObjectMapper();
         JsonNode json = objectMapper.readTree(inputStream);
 
-        JsonNode jsonId = json.path("id");
+        JsonNode jsonId = json.get("id");
         context.getLogger().log("Id: " + jsonId);
-        if(jsonId != null) {
-            id = jsonId.asText();
+        if(jsonId != null && !jsonId.isMissingNode()) {
+            id = jsonId.asText().trim().length() > 0 ? jsonId.textValue() : null;
         }
 
         HashMap<String, AttributeValue> attributesMap = new HashMap<>();
