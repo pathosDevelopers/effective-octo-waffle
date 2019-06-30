@@ -43,7 +43,10 @@ public class AddNotesHandler implements RequestStreamHandler {
         if(notes == null) {
             notes = new ArrayList<>();
         }
+
         notes.add(note);
+
+        intervention.setNotes(notes);
 
         mapper.save(intervention);
     }
