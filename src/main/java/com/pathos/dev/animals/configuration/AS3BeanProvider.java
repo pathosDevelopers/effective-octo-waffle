@@ -9,8 +9,8 @@ import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 
 public class AS3BeanProvider {
     private static final String BUCKET_NAME = "interventionsfiles";
-    private static final String ACCESS_KEY = "AKIA2EVYDQMXHW2WWJ66";
-    private static final String SECRET_KEY = "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";
+    private static final String ACCESS_KEY = "ACCESS_KEY";
+    private static final String SECRET_KEY = "SECRET_KEY";
 
     private static final AmazonS3 s3Client;
 
