@@ -49,8 +49,6 @@ public class GetInterventions implements RequestStreamHandler {
             attributesMap.put(":interventionDate", new AttributeValue().withN(String.valueOf(LocalDate.now().minusDays(30).toEpochDay())));
         }
 
-        ScanRequest scanRequest = new ScanRequest().withTableName(TABLE_NAME);
-
         DynamoDBScanExpression scanExpression = new DynamoDBScanExpression();
 
         AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard().build();
