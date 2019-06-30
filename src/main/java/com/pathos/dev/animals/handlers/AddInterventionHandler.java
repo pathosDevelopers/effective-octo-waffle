@@ -49,7 +49,7 @@ public class AddInterventionHandler implements RequestHandler<InterventionReques
             String number = interventionRequest.getHouseNumber();
             String city = interventionRequest.getCity();
 
-            URL url = new URL("https://maps.googleapis.com/maps/api/geocode/json?address=" + street + "+" + number + "&components=administrative_area:" + city + "|country:Poland&key=AIzaSyC_7O66-Ytfd2FDfjpXcY6FCJPCSOxz9uo");
+            URL url = new URL("https://maps.googleapis.com/maps/api/geocode/json?address=" + street + "+" + number + "&components=administrative_area:" + city + "|country:Poland&key=API_KEY");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Accept", "application/json");
