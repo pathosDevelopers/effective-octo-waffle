@@ -8,16 +8,16 @@ import com.amazonaws.services.dynamodbv2.model.UpdateItemRequest;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.pathos.dev.animals.domain.InterventionRequest;
-import com.pathos.dev.animals.domain.InterventionsQueryResponse;
+import com.pathos.dev.animals.domain.InterventionResponse;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class EditInterventionHandler implements RequestHandler<InterventionRequest, InterventionsQueryResponse> {
+public class EditInterventionHandler implements RequestHandler<InterventionRequest, InterventionResponse> {
 
     @Override
-    public InterventionsQueryResponse handleRequest(InterventionRequest interventionRequest, Context context) {
+    public InterventionResponse handleRequest(InterventionRequest interventionRequest, Context context) {
         try {
             AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard().build();
             Map<String, AttributeValueUpdate> attributeValues = new HashMap<>();
@@ -31,7 +31,7 @@ public class EditInterventionHandler implements RequestHandler<InterventionReque
             updateValWithS(attributeValues, "houseNumber", interventionRequest.getHouseNumber());
             updateValWithS(attributeValues, "city", interventionRequest.getCity());
             updateValWithS(attributeValues, "street", interventionRequest.getStreet());
-            updateValWithN(attributeValues, "requestStatus", interventionRequest.getRequestStatus());
+            updateValWithN(attributeValues, "interventionStatus", interventionRequest.getRequestStatus());
 
             attributeValues.values().removeIf(Objects::isNull);
 
@@ -45,7 +45,7 @@ public class EditInterventionHandler implements RequestHandler<InterventionReque
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return new InterventionsQueryResponse();
+        return new InterventionResponse();
     }
 
     private void updateValWithS(Map<String, AttributeValueUpdate> attributeValues, String key, String value) {
