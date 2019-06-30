@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class EditInterventionHander implements RequestHandler<InterventionRequest, InterventionsQueryResponse> {
+public class EditInterventionHandler implements RequestHandler<InterventionRequest, InterventionsQueryResponse> {
 
     @Override
     public InterventionsQueryResponse handleRequest(InterventionRequest interventionRequest, Context context) {
