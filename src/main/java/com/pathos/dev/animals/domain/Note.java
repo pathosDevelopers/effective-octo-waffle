@@ -1,11 +1,12 @@
 package com.pathos.dev.animals.domain;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
 import java.util.Date;
 
-@DynamoDBTable(tableName = "Interventions")
+@DynamoDBDocument
 public class Note {
     private String title;
     private String author;

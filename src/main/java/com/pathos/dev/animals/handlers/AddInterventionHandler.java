@@ -2,6 +2,8 @@ package com.pathos.dev.animals.handlers;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBSaveExpression;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.PutItemRequest;
 import com.amazonaws.services.lambda.runtime.Context;
@@ -24,24 +26,12 @@ public class AddInterventionHandler implements RequestHandler<InterventionReques
             context.getLogger().log("Input: " + interventionRequest.toString());
             final ObjectMapper objectMapper = new ObjectMapper();
 
-            attributeValues.put("id", new AttributeValue().withS(UUID.randomUUID().toString()));
-            attributeValues.put("requestDate", new AttributeValue().withN(Long.toString(new Date().getTime())));
+            interventionRequest.setId(UUID.randomUUID().toString());
+            interventionRequest.setRequestDate(new Date().getTime());
 
-            addValWithS(attributeValues, "name", interventionRequest.getName());
-            addValWithS(attributeValues, "surname", interventionRequest.getSurname());
-            addValWithS(attributeValues, "description", interventionRequest.getDescription());
-            addValWithS(attributeValues, "phoneNumber", interventionRequest.getPhoneNumber());
-            addValWithS(attributeValues, "parcel", interventionRequest.getParcel());
-            addValWithS(attributeValues, "houseNumber", interventionRequest.getHouseNumber());
-            addValWithS(attributeValues, "city", interventionRequest.getCity());
-            addValWithS(attributeValues, "street", interventionRequest.getStreet());
-            addValWithN(attributeValues, "requestStatus", interventionRequest.getRequestStatus());
+            DynamoDBMapper mapper = new DynamoDBMapper(client);
 
-            attributeValues.values().removeIf(Objects::isNull);
-
-            PutItemRequest putItemRequest = new PutItemRequest().withTableName("Interventions").withItem(attributeValues);
-            client.putItem(putItemRequest);
-
+            mapper.save(interventionRequest);
         } catch (Exception e) {
             e.printStackTrace();
         }

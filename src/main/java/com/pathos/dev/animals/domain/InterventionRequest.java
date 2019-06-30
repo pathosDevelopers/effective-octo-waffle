@@ -5,6 +5,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
 import java.util.Date;
+import java.util.List;
 
 @DynamoDBTable(tableName = "Interventions")
 public class InterventionRequest {
@@ -23,6 +24,8 @@ public class InterventionRequest {
     private String street;
 
     private int requestStatus;
+
+    private List<Note> notes;
 
     private double longitude, latitude;
 
@@ -141,6 +144,15 @@ public class InterventionRequest {
 
     public void setLatitude(double latitude) {
         this.latitude = latitude;
+    }
+
+    @DynamoDBAttribute(attributeName = "notes")
+    public List<Note> getNotes() {
+        return notes;
+    }
+
+    public void setNotes(List<Note> notes) {
+        this.notes = notes;
     }
 
     @Override
