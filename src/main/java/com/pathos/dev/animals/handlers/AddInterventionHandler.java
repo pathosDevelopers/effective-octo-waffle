@@ -6,6 +6,7 @@ import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.PutItemRequest;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pathos.dev.animals.domain.InterventionRequest;
 import com.pathos.dev.animals.domain.InterventionsQueryResponse;
 
@@ -19,6 +20,9 @@ public class AddInterventionHandler implements RequestHandler<InterventionReques
         try {
             AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard().build();
             Map<String, AttributeValue> attributeValues = new HashMap<>();
+
+            context.getLogger().log("Input: " + interventionRequest.toString());
+            final ObjectMapper objectMapper = new ObjectMapper();
 
             attributeValues.put("id", new AttributeValue().withS(UUID.randomUUID().toString()));
             attributeValues.put("requestDate", new AttributeValue().withN(Long.toString(new Date().getTime())));
