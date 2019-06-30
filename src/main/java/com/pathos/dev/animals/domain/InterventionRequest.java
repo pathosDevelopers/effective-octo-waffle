@@ -3,10 +3,7 @@ package com.pathos.dev.animals.domain;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTyped;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @DynamoDBTable(tableName = "Interventions")
@@ -28,8 +25,6 @@ public class InterventionRequest {
     private int requestStatus;
 
     private List<Note> notes;
-
-    private List<String> files;
 
     private double longitude, latitude;
 
@@ -157,15 +152,6 @@ public class InterventionRequest {
 
     public void setNotes(List<Note> notes) {
         this.notes = notes;
-    }
-
-    @DynamoDBAttribute
-    public List<String> getFiles() {
-        return files;
-    }
-
-    public void setFiles(List<String> files) {
-        this.files = files;
     }
 
     @Override

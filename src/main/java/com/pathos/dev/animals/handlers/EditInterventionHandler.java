@@ -2,52 +2,73 @@ package com.pathos.dev.animals.handlers;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.AttributeValueUpdate;
 import com.amazonaws.services.dynamodbv2.model.UpdateItemRequest;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
-import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pathos.dev.animals.domain.InterventionRequest;
-import com.pathos.dev.animals.domain.InterventionsQueryResponse;
+import com.pathos.dev.animals.domain.InterventionResponse;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class EditInterventionHandler implements RequestStreamHandler {
+public class EditInterventionHandler implements RequestHandler<InterventionRequest, InterventionResponse> {
 
     @Override
-    public void handleRequest(InputStream inputStream, OutputStream outputStream, Context context) throws IOException {
-        final ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode json = objectMapper.readTree(inputStream);
-        JsonNode jsonId = json.get("id");
-        context.getLogger().log("InterventionId: " + jsonId);
+    public InterventionResponse handleRequest(InterventionRequest interventionRequest, Context context) {
+        try {
+            AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard().build();
+            Map<String, AttributeValueUpdate> attributeValues = new HashMap<>();
 
-        AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard().build();
-        DynamoDBMapper mapper = new DynamoDBMapper(client);
+            updateValWithL(attributeValues, "requestDate", interventionRequest.getRequestDate());
+            updateValWithS(attributeValues, "name", interventionRequest.getName());
+            updateValWithS(attributeValues, "surname", interventionRequest.getSurname());
+            updateValWithS(attributeValues, "description", interventionRequest.getDescription());
+            updateValWithS(attributeValues, "phoneNumber", interventionRequest.getPhoneNumber());
+            updateValWithS(attributeValues, "parcel", interventionRequest.getParcel());
+            updateValWithS(attributeValues, "houseNumber", interventionRequest.getHouseNumber());
+            updateValWithS(attributeValues, "city", interventionRequest.getCity());
+            updateValWithS(attributeValues, "street", interventionRequest.getStreet());
+            updateValWithN(attributeValues, "interventionStatus", interventionRequest.getRequestStatus());
 
-        InterventionRequest intervention = mapper.load(InterventionRequest.class, jsonId.asText());
+            attributeValues.values().removeIf(Objects::isNull);
 
-        JsonNode jsonIntervention = json.get("intervention");
-        intervention.setCity(json.get("city").asText());
-        intervention.setDescription(json.get("description").asText());
-        intervention.setHouseNumber(json.get("houseNumber").asText());
-        intervention.setName(json.get("name").asText());
-        intervention.setParcel(json.get("parcel").asText());
-        intervention.setPhoneNumber(json.get("phoneNumber").asText());
-        intervention.setStreet(json.get("street").asText());
-        intervention.setSurname(json.get("surname").asText());
-        intervention.setRequestStatus(json.get("requestStatus").asInt());
+            UpdateItemRequest updateItemRequest = new UpdateItemRequest()
+                    .withTableName("Interventions")
+                    .addKeyEntry("id", new AttributeValue().withS(interventionRequest.getId()))
+                    .withAttributeUpdates(attributeValues);
 
-        mapper.save(intervention);
+            client.updateItem(updateItemRequest);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new InterventionResponse();
     }
 
+    private void updateValWithS(Map<String, AttributeValueUpdate> attributeValues, String key, String value) {
+        if (value != null) {
+            AttributeValueUpdate attributeValueUpdate = new AttributeValueUpdate();
+            AttributeValue attributeValue = new AttributeValue().withS(value);
+            attributeValueUpdate.setValue(attributeValue);
+            attributeValues.put(key, attributeValueUpdate);
+        }
+    }
+
+    private void updateValWithN(Map<String, AttributeValueUpdate> attributeValues, String key, int value) {
+        AttributeValueUpdate attributeValueUpdate = new AttributeValueUpdate();
+        AttributeValue attributeValue = new AttributeValue().withN(String.valueOf(value));
+        attributeValueUpdate.setValue(attributeValue);
+        attributeValues.put(key, attributeValueUpdate);
+    }
+
+    private void updateValWithL(Map<String, AttributeValueUpdate> attributeValues, String key, long value) {
+        AttributeValueUpdate attributeValueUpdate = new AttributeValueUpdate();
+        AttributeValue attributeValue = new AttributeValue().withN(String.valueOf(value));
+        attributeValueUpdate.setValue(attributeValue);
+        attributeValues.put(key, attributeValueUpdate);
+    }
 }
 
